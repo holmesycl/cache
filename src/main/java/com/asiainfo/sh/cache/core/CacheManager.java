@@ -52,9 +52,7 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @return
 	 */
 	public Cache<String, V> getMultilvelCache(String name) {
-		if (multivelCache == null) {
-			multivelCache = new MultilvelCache<V>(name);
-		}
+		multivelCache = new MultilvelCache<V>(name);
 		return multivelCache;
 	}
 

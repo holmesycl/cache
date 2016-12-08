@@ -3,16 +3,15 @@ package com.asiainfo.sh.cache.core.redis;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.asiainfo.sh.cache.core.MultilvelCachePubSub;
+import com.asiainfo.sh.cache.core.MultilvelCachePubSubTask;
+import com.asiainfo.sh.cache.core.ThreadPoolExecutor;
 import com.asiainfo.sh.cache.core.util.Assert;
 import com.asiainfo.sh.cache.core.util.ObjectUtils;
 
@@ -31,8 +30,6 @@ public final class JedisClusterManager {
 	private static RedisConfigurationProperties redisConfigurationProperties;
 
 	private static JedisPoolConfig jedisPoolConfig;
-
-	private static final ExecutorService executor = Executors.newCachedThreadPool();
 
 	private JedisClusterManager() {
 	}
@@ -110,24 +107,12 @@ public final class JedisClusterManager {
 						jedisCluster.setex("0", 1, "0");
 						// 启动集群广播监控
 						// 获取当前集群监控和支持的channels
-						executor.submit(new Callable<String>() {
-
-							@Override
-							public String call() throws Exception {
-								MultilvelCachePubSub cachePubSub = new MultilvelCachePubSub(_cluster, type);
-								try {
-									jedisCluster.subscribe(cachePubSub, cachePubSub.channels());
-								} catch (Exception e) {
-									log.error("集群[" + _cluster + "]订阅出错了.", e);
-								}
-								return null;
-							}
-						});
+						ThreadPoolExecutor.submit(
+								new MultilvelCachePubSubTask(jedisCluster, new MultilvelCachePubSub(_cluster, type)));
 						clusters.put(clusterType, jedisCluster);
 					} catch (Exception e) {
-						log.error("集群不可用.", e);
+						log.info("集群[" + _cluster + " | " + type.getName() + "]不可用...");
 					}
-					clusters.put(_cluster + DOT + type.getName(), new JedisCluster(hostAndPorts, getJedisPoolConfig()));
 				}
 			}
 		}
