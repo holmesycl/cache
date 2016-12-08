@@ -26,9 +26,7 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @return
 	 */
 	public Cache<K, V> getRedisCache(String name) {
-		if (redisCache == null) {
-			redisCache = new RedisCache<K, V>(name);
-		}
+		redisCache = new RedisCache<K, V>(name);
 		return redisCache;
 	}
 
@@ -39,9 +37,7 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @return
 	 */
 	public Cache<K, V> getEhCache(String name) {
-		if (ehCache == null) {
-			ehCache = new EhCache<K, V>(name);
-		}
+		ehCache = new EhCache<K, V>(name);
 		return ehCache;
 	}
 
