@@ -1,7 +1,6 @@
 package com.asiainfo.sh.cache.core;
 
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 
 import com.asiainfo.sh.cache.core.util.Assert;
 
@@ -19,7 +18,7 @@ public abstract class AbstractCache<K extends Serializable, V extends Serializab
 	}
 
 	@Override
-	public abstract V get(K key, Callable<? extends V> loader) throws CacheException;
+	public abstract V get(K key, Loader<? extends V> loader) throws CacheException;
 
 	@Override
 	public abstract void put(K key, V value);

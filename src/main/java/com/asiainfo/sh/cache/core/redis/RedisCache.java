@@ -1,10 +1,10 @@
 package com.asiainfo.sh.cache.core.redis;
 
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 
 import com.asiainfo.sh.cache.core.AbstractCache;
 import com.asiainfo.sh.cache.core.CacheException;
+import com.asiainfo.sh.cache.core.Loader;
 import com.asiainfo.sh.cache.core.util.Assert;
 import com.asiainfo.sh.cache.core.util.SerializationUtils;
 
@@ -23,7 +23,7 @@ public class RedisCache<K extends Serializable, V extends Serializable> extends 
 	}
 
 	@Override
-	public V get(K key, Callable<? extends V> loader) throws CacheException {
+	public V get(K key, Loader<? extends V> loader) throws CacheException {
 		Assert.notNull(key, "key不能为空。");
 		byte[] seriValue = cluster.forType(ClusterTypeHolder.get(getName())).get(SerializationUtils.serialize(key));
 		@SuppressWarnings("unchecked")

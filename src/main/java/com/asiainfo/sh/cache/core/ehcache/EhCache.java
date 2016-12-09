@@ -1,13 +1,13 @@
 package com.asiainfo.sh.cache.core.ehcache;
 
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.asiainfo.sh.cache.core.AbstractCache;
 import com.asiainfo.sh.cache.core.CacheException;
+import com.asiainfo.sh.cache.core.Loader;
 import com.asiainfo.sh.cache.core.util.Assert;
 
 import net.sf.ehcache.Cache;
@@ -25,13 +25,13 @@ public class EhCache<K extends Serializable, V extends Serializable> extends Abs
 	}
 
 	@Override
-	public V get(K key, Callable<? extends V> loader) throws CacheException {
+	public V get(K key, Loader<? extends V> loader) throws CacheException {
 		Assert.notNull(key, "key不能为空.");
 		Element element = cache.get(key);
 		if (element == null) {
 			if (loader != null) {
 				try {
-					V value = loader.call();
+					V value = loader.load();
 					if (value != null) {
 						this.put(key, value);
 					}

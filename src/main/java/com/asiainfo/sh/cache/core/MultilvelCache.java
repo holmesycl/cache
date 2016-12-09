@@ -1,18 +1,15 @@
 package com.asiainfo.sh.cache.core;
 
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.asiainfo.sh.cache.core.AbstractCache;
-import com.asiainfo.sh.cache.core.CacheException;
 import com.asiainfo.sh.cache.core.ehcache.EhCache;
 import com.asiainfo.sh.cache.core.ehcache.EhCacheManager;
 import com.asiainfo.sh.cache.core.redis.Cluster;
-import com.asiainfo.sh.cache.core.redis.JedisClusterManager;
 import com.asiainfo.sh.cache.core.redis.ClusterTypeHolder;
+import com.asiainfo.sh.cache.core.redis.JedisClusterManager;
 import com.asiainfo.sh.cache.core.util.Assert;
 import com.asiainfo.sh.cache.core.util.SerializationUtils;
 
@@ -34,7 +31,7 @@ public class MultilvelCache<V extends Serializable> extends AbstractCache<String
 	}
 
 	@Override
-	public V get(String key, Callable<? extends V> loader) throws CacheException {
+	public V get(String key, Loader<? extends V> loader) throws CacheException {
 		Assert.hasText(key, "key不能为空.");
 		// 访问ehcache缓存
 		Element element = cache.get(key);
@@ -46,7 +43,7 @@ public class MultilvelCache<V extends Serializable> extends AbstractCache<String
 			if (v == null) {
 				if (loader != null) {
 					try {
-						V value = loader.call();
+						V value = loader.load();
 						if (value != null) {
 							this.put(key, value);
 						}
