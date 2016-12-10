@@ -9,6 +9,9 @@ import redis.clients.jedis.JedisCluster;
  * 
  */
 public class Cluster {
+
+	private String name;
+
 	/**
 	 * 主集群
 	 */
@@ -32,30 +35,26 @@ public class Cluster {
 		return null;
 	}
 
-	public Cluster() {
-		super();
+	public Cluster(String name) {
+		this.name = name;
 	}
 
-	public Cluster(JedisCluster masterJedisCluster, JedisCluster backupJedisCluster) {
-		super();
+	public Cluster(String name, JedisCluster masterJedisCluster, JedisCluster backupJedisCluster) {
+		this(name);
 		this.masterJedisCluster = masterJedisCluster;
 		this.backupJedisCluster = backupJedisCluster;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public JedisCluster getMasterJedisCluster() {
 		return masterJedisCluster;
 	}
 
-	public void setMasterJedisCluster(JedisCluster masterJedisCluster) {
-		this.masterJedisCluster = masterJedisCluster;
-	}
-
 	public JedisCluster getBackupJedisCluster() {
 		return backupJedisCluster;
-	}
-
-	public void setBackupJedisCluster(JedisCluster backupJedisCluster) {
-		this.backupJedisCluster = backupJedisCluster;
 	}
 
 }

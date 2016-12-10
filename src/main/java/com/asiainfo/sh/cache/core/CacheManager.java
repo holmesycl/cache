@@ -13,11 +13,7 @@ import com.asiainfo.sh.cache.core.redis.RedisCache;
  * @param <K>
  * @param <V>
  */
-public class CacheManager<K extends Serializable, V extends Serializable> {
-
-	private Cache<K, V> redisCache, ehCache;
-
-	private Cache<String, V> multivelCache;
+public class CacheManager {
 
 	/**
 	 * 返回redis缓存。
@@ -25,9 +21,8 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @param name
 	 * @return
 	 */
-	public Cache<K, V> getRedisCache(String name) {
-		redisCache = new RedisCache<K, V>(name);
-		return redisCache;
+	public <K extends Serializable, V extends Serializable> Cache<K, V> getRedisCache(String name) {
+		return new RedisCache<K, V>(name);
 	}
 
 	/**
@@ -36,9 +31,8 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @param name
 	 * @return
 	 */
-	public Cache<K, V> getEhCache(String name) {
-		ehCache = new EhCache<K, V>(name);
-		return ehCache;
+	public <K extends Serializable, V extends Serializable> Cache<K, V> getEhCache(String name) {
+		return new EhCache<K, V>(name);
 	}
 
 	/**
@@ -47,9 +41,8 @@ public class CacheManager<K extends Serializable, V extends Serializable> {
 	 * @param name
 	 * @return
 	 */
-	public Cache<String, V> getMultilvelCache(String name) {
-		multivelCache = new MultilvelCache<V>(name);
-		return multivelCache;
+	public <V extends Serializable> Cache<String, V> getMultilvelCache(String name) {
+		return new MultilvelCache<V>(name);
 	}
 
 }

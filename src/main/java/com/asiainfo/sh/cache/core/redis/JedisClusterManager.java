@@ -126,7 +126,7 @@ public final class JedisClusterManager {
 	 * @return
 	 */
 	public static Cluster getJedisCluster(final String cluster) {
-		return new Cluster(getJedisCluster(cluster, Type.MASTER), getJedisCluster(cluster, Type.BACKUP));
+		return new Cluster(cluster, getJedisCluster(cluster, Type.MASTER), getJedisCluster(cluster, Type.BACKUP));
 	}
 
 	/**

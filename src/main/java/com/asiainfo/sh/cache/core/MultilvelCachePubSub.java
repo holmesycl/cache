@@ -42,7 +42,7 @@ public class MultilvelCachePubSub extends JedisPubSub {
 		super();
 		this.cluster = cluster;
 		this.type = type;
-		this.ehCache = new CacheManager<Serializable, Serializable>().getEhCache(cluster);
+		this.ehCache = new CacheManager().getEhCache(cluster);
 	}
 
 	public MultilvelCachePubSub() {

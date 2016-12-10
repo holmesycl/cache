@@ -2,49 +2,28 @@ package com.asiainfo.sh.cache.core.ehcache;
 
 import java.io.Serializable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.asiainfo.sh.cache.core.AbstractCache;
-import com.asiainfo.sh.cache.core.CacheException;
-import com.asiainfo.sh.cache.core.Loader;
 import com.asiainfo.sh.cache.core.util.Assert;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+/**
+ * Ehcache缓存.
+ * 
+ * @author holme
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class EhCache<K extends Serializable, V extends Serializable> extends AbstractCache<K, V> {
 
 	private Cache cache;
 
-	private Logger log = LoggerFactory.getLogger(EhCache.class);
-
 	public EhCache(String name) {
 		super(name);
-		cache = EhCacheManager.getInstance().getCache(getName());
-	}
-
-	@Override
-	public V get(K key, Loader<? extends V> loader) throws CacheException {
-		Assert.notNull(key, "key不能为空.");
-		Element element = cache.get(key);
-		if (element == null) {
-			if (loader != null) {
-				try {
-					V value = loader.load();
-					if (value != null) {
-						this.put(key, value);
-					}
-					return value;
-				} catch (Exception e) {
-					log.error("loader获取数据出错.", e);
-				}
-			}
-			return null;
-		}
-		@SuppressWarnings("unchecked")
-		V v = (V) element.getObjectValue();
-		return v;
+		cache = CacheManager.create().getCache(getName());
 	}
 
 	@Override
@@ -65,6 +44,17 @@ public class EhCache<K extends Serializable, V extends Serializable> extends Abs
 	 */
 	public void invalidateAll() {
 		cache.removeAll();
+	}
+
+	@Override
+	protected V getCacheValue(K key) {
+		Element element = cache.get(key);
+		if (element != null) {
+			@SuppressWarnings("unchecked")
+			V v = (V) element.getObjectValue();
+			return v;
+		}
+		return null;
 	}
 
 }

@@ -2,6 +2,8 @@ package com.asiainfo.sh.cache.core;
 
 import java.io.Serializable;
 
+import com.asiainfo.sh.cache.core.exception.CacheException;
+
 /**
  * 缓存接口
  * 
