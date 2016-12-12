@@ -14,6 +14,12 @@ public class ClusterTypeHolder {
 		holder.put(cluster, type);
 	}
 
+	/**
+	 * 第一次访问主集群
+	 * 
+	 * @param cluster
+	 * @return
+	 */
 	public static Type get(String cluster) {
 		return holder.get(cluster) == null ? Type.MASTER : holder.get(cluster);
 	}

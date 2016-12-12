@@ -3,6 +3,7 @@ package com.asiainfo.sh.cache.core;
 import java.io.Serializable;
 
 import com.asiainfo.sh.cache.core.ehcache.EhCache;
+import com.asiainfo.sh.cache.core.multilevel.MultilevelCache;
 import com.asiainfo.sh.cache.core.redis.RedisCache;
 
 /**
@@ -41,8 +42,8 @@ public class CacheManager {
 	 * @param name
 	 * @return
 	 */
-	public <V extends Serializable> Cache<String, V> getMultilvelCache(String name) {
-		return new MultilvelCache<V>(name);
+	public <V extends Serializable> Cache<String, V> getMultilevelCache(String name) {
+		return new MultilevelCache<V>(name);
 	}
 
 }

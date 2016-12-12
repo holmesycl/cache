@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.asiainfo.sh.cache.core.MultilvelCachePubSub;
-import com.asiainfo.sh.cache.core.MultilvelCachePubSubTask;
 import com.asiainfo.sh.cache.core.ThreadPoolExecutor;
 import com.asiainfo.sh.cache.core.util.Assert;
 import com.asiainfo.sh.cache.core.util.ObjectUtils;
@@ -18,6 +16,7 @@ import com.asiainfo.sh.cache.core.util.ObjectUtils;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public final class JedisClusterManager {
 
@@ -106,12 +105,12 @@ public final class JedisClusterManager {
 					try {
 						jedisCluster.setex("0", 1, "0");
 						// 启动集群广播监控
-						// 获取当前集群监控和支持的channels
 						ThreadPoolExecutor.submit(
-								new MultilvelCachePubSubTask(jedisCluster, new MultilvelCachePubSub(_cluster, type)));
+								new CachePubSubTask(jedisCluster, new CachePubSub(_cluster, type)));
 						clusters.put(clusterType, jedisCluster);
 					} catch (Exception e) {
-						log.info("集群[" + _cluster + " | " + type.getName() + "]不可用...");
+						log.error("集群[" + _cluster + " | " + type.getName() + "]不可用...");
+						throw new JedisConnectionException(e);
 					}
 				}
 			}

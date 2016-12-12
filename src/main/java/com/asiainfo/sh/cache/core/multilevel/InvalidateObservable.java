@@ -1,4 +1,4 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.multilevel;
 
 public interface InvalidateObservable {
 

@@ -1,4 +1,4 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.multilevel;
 
 /**
  * 失效缓存数据监听者.

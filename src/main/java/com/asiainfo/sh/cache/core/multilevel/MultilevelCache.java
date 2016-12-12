@@ -1,7 +1,9 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.multilevel;
 
 import java.io.Serializable;
 
+import com.asiainfo.sh.cache.core.AbstractCache;
+import com.asiainfo.sh.cache.core.Loader;
 import com.asiainfo.sh.cache.core.ehcache.EhCache;
 import com.asiainfo.sh.cache.core.exception.LoadException;
 import com.asiainfo.sh.cache.core.redis.Cluster;
@@ -10,7 +12,7 @@ import com.asiainfo.sh.cache.core.redis.JedisClusterManager;
 import com.asiainfo.sh.cache.core.util.Assert;
 import com.asiainfo.sh.cache.core.util.SerializationUtils;
 
-public class MultilvelCache<V extends Serializable> extends AbstractCache<String, V> {
+public class MultilevelCache<V extends Serializable> extends AbstractCache<String, V> {
 
 	private EhCache<String, V> cache;
 
@@ -18,7 +20,7 @@ public class MultilvelCache<V extends Serializable> extends AbstractCache<String
 
 	private InvalidateObservable invalidateObservable;
 
-	public MultilvelCache(String name) {
+	public MultilevelCache(String name) {
 		super(name);
 		cache = new EhCache<String, V>(getName());
 		cluster = JedisClusterManager.getJedisCluster(getName());

@@ -1,13 +1,13 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.redis;
 
 import java.io.Serializable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.asiainfo.sh.cache.core.Cache;
+import com.asiainfo.sh.cache.core.CacheManager;
 import com.asiainfo.sh.cache.core.ehcache.EhCache;
-import com.asiainfo.sh.cache.core.redis.ClusterTypeHolder;
-import com.asiainfo.sh.cache.core.redis.Type;
 import com.asiainfo.sh.cache.core.util.ObjectUtils;
 
 import redis.clients.jedis.JedisPubSub;
@@ -18,9 +18,9 @@ import redis.clients.jedis.JedisPubSub;
  * @author yecl
  *
  */
-public class MultilvelCachePubSub extends JedisPubSub {
+public class CachePubSub extends JedisPubSub {
 
-	private static final Logger log = LoggerFactory.getLogger(MultilvelCachePubSub.class);
+	private static final Logger log = LoggerFactory.getLogger(CachePubSub.class);
 
 	private String cluster;
 
@@ -38,14 +38,14 @@ public class MultilvelCachePubSub extends JedisPubSub {
 
 	private Cache<Serializable, Serializable> ehCache;
 
-	public MultilvelCachePubSub(String cluster, Type type) {
+	public CachePubSub(String cluster, Type type) {
 		super();
 		this.cluster = cluster;
 		this.type = type;
 		this.ehCache = new CacheManager().getEhCache(cluster);
 	}
 
-	public MultilvelCachePubSub() {
+	public CachePubSub() {
 		this("", Type.MASTER);
 	}
 
@@ -114,7 +114,7 @@ public class MultilvelCachePubSub extends JedisPubSub {
 			ehCache.invalidate(message);
 			log.info("本地缓存[" + cluster + "]key:[" + key + "]失效成功...");
 		} else {
-			// 待定...
+			log.info("不支持处理的channel[" + channel + "]...");
 		}
 	}
 }

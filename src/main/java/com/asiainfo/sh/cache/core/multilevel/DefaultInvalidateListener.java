@@ -1,5 +1,6 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.multilevel;
 
+import com.asiainfo.sh.cache.core.redis.CachePubSub;
 import com.asiainfo.sh.cache.core.redis.Cluster;
 import com.asiainfo.sh.cache.core.redis.ClusterTypeHolder;
 
@@ -16,7 +17,7 @@ public class DefaultInvalidateListener implements InvalidateListener {
 		if (keys != null) {
 			for (String key : keys) {
 				cluster.forType(ClusterTypeHolder.get(cluster.getName()))
-						.publish(MultilvelCachePubSub.getInvalidateChannel(), key);
+						.publish(CachePubSub.getInvalidateChannel(), key);
 
 			}
 		}

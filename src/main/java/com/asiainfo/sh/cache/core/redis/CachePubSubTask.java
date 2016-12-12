@@ -1,4 +1,4 @@
-package com.asiainfo.sh.cache.core;
+package com.asiainfo.sh.cache.core.redis;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -6,19 +6,17 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.asiainfo.sh.cache.core.MultilvelCachePubSub;
-
 import redis.clients.jedis.JedisCluster;
 
-public class MultilvelCachePubSubTask implements Callable<String> {
+public class CachePubSubTask implements Callable<String> {
 
-	private static final Logger log = LoggerFactory.getLogger(MultilvelCachePubSubTask.class);
+	private static final Logger log = LoggerFactory.getLogger(CachePubSubTask.class);
 
 	private JedisCluster jedisCluster;
 
-	private MultilvelCachePubSub cachePubSub;
+	private CachePubSub cachePubSub;
 
-	public MultilvelCachePubSubTask(JedisCluster jedisCluster, MultilvelCachePubSub cachePubSub) {
+	public CachePubSubTask(JedisCluster jedisCluster, CachePubSub cachePubSub) {
 		this.jedisCluster = jedisCluster;
 		this.cachePubSub = cachePubSub;
 	}
